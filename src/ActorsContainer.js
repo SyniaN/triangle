@@ -1,112 +1,128 @@
 import { useReducer } from "react";
 import createContainer from "constate";
+import { initialState } from "./initialState";
 
-const initialState = {
-  player: {
-    init_x: 0,
-    init_y: 0,
-    x: 0,
-    y: 0
-  },
-  ais: [
-    {
-      init_x: 40,
-      init_y: 40,
-      x: 40,
-      y: 40,
-      direction: "DOWN"
-    },
-    {
-      init_x: 120,
-      init_y: 20,
-      x: 120,
-      y: 20,
-      direction: "UP"
-    },
-    {
-      init_x: 60,
-      init_y: 140,
-      x: 60,
-      y: 140,
-      direction: "RIGHT"
-    }
-  ]
-};
-
-function moveAi(ai) {
-  switch (ai.direction) {
-    case "DOWN":
+function movePlayer(actionType, player) {
+  switch (actionType) {
+    case "MOVE_LEFT":
       return {
-        ...ai,
-        y: ai.y + 20,
-        direction: ai.y - ai.init_y < 60 && ai.y < 180 ? "DOWN" : "UP"
+        ...player,
+        x: player.x > 0 ? player.x - 20 : 0
       };
-
-    case "UP":
+    case "MOVE_RIGHT":
       return {
-        ...ai,
-        y: ai.y - 20,
-        direction: ai.init_y - ai.y < 60 && ai.y > 20 ? "UP" : "DOWN"
+        ...player,
+        x: player.x < 180 ? player.x + 20 : 180
       };
-    case "LEFT":
+    case "MOVE_UP":
       return {
-        ...ai,
-        x: ai.x - 20,
-        direction: ai.init_x - ai.x < 60 && ai.x > 20 ? "LEFT" : "RIGHT"
+        ...player,
+        y: player.y > 0 ? player.y - 20 : 0
       };
-    case "RIGHT":
+    case "MOVE_DOWN":
       return {
-        ...ai,
-        x: ai.x + 20,
-        direction: ai.x - ai.init_x < 60 && ai.x < 180 ? "RIGHT" : "LEFT"
+        ...player,
+        y: player.y < 180 ? player.y + 20 : 180
       };
     default:
-      return ai;
+      return player;
+  }
+}
+
+function reverseDirection(direction) {
+  if (direction === "UP") return "DOWN";
+  if (direction === "DOWN") return "UP";
+  if (direction === "RIGHT") return "LEFT";
+  if (direction === "LEFT") return "RIGHT";
+}
+
+function moveAi(ai) {
+  const withinRange =
+    Math.abs(ai.y - ai.init_y) < 60 && Math.abs(ai.x - ai.init_x) < 60;
+  const withinBound = ai.y < 180 && ai.y > 20 && ai.x < 180 && ai.x > 20;
+
+  if ((withinRange && withinBound) || ai.justTurnedAround) {
+    switch (ai.direction) {
+      case "DOWN":
+        return {
+          ...ai,
+          y: ai.y + 20,
+          justTurnedAround: false
+        };
+
+      case "UP":
+        return {
+          ...ai,
+          y: ai.y - 20,
+          justTurnedAround: false
+        };
+      case "LEFT":
+        return {
+          ...ai,
+          x: ai.x - 20,
+          justTurnedAround: false
+        };
+      case "RIGHT":
+        return {
+          ...ai,
+          x: ai.x + 20,
+          justTurnedAround: false
+        };
+      default:
+        return ai;
+    }
+  } else {
+    return {
+      ...ai,
+      direction: reverseDirection(ai.direction),
+      justTurnedAround: true
+    };
   }
 }
 
 function reducer(state, action) {
   let returnObj = {};
-  switch (action.type) {
-    case "MOVE_LEFT":
-      returnObj = {
-        player: {
-          ...state.player,
-          x: state.player.x > 0 ? state.player.x - 20 : 0
-        },
-        ais: state.ais.map(ai => moveAi(ai))
-      };
-      break;
-    case "MOVE_RIGHT":
-      returnObj = {
-        player: {
-          ...state.player,
-          x: state.player.x < 180 ? state.player.x + 20 : 180
-        },
-        ais: state.ais.map(ai => moveAi(ai))
-      };
-      break;
-    case "MOVE_UP":
-      returnObj = {
-        player: {
-          ...state.player,
-          y: state.player.y > 0 ? state.player.y - 20 : 0
-        },
-        ais: state.ais.map(ai => moveAi(ai))
-      };
-      break;
-    case "MOVE_DOWN":
-      returnObj = {
-        player: {
-          ...state.player,
-          y: state.player.y < 180 ? state.player.y + 20 : 180
-        },
-        ais: state.ais.map(ai => moveAi(ai))
-      };
-      break;
-    default:
-      returnObj = state;
+
+  const player = movePlayer(action.type, state.player);
+
+  const playerHitWall = state.walls.some(
+    wall => wall.x === player.x && wall.y === player.y
+  );
+
+  if (playerHitWall) {
+    player.x = state.player.x;
+    player.y = state.player.y;
   }
+
+  const ais = state.ais
+    .map(ai => moveAi(ai))
+    .map((ai, i) => {
+      const aiHitWall = state.walls.some(
+        wall => wall.x === ai.x && wall.y === ai.y
+      );
+      if (aiHitWall) {
+        ai.x = state.ais[i].x;
+        ai.y = state.ais[i].y;
+        ai.direction = reverseDirection(ai.direction);
+      }
+      return ai;
+    });
+
+  const playerHitEnemy = ais.some(
+    (ai, i) =>
+      (ai.x === player.x && ai.y === player.y) ||
+      (ai.x === state.player.x &&
+        ai.y === state.player.y &&
+        state.ais[i].x === player.x &&
+        state.ais[i].y === player.y)
+  );
+
+  if (playerHitEnemy) {
+    player.x = state.player.init_x;
+    player.y = state.player.init_y;
+  }
+
+  returnObj = { player, ais, walls: state.walls };
 
   return returnObj;
 }

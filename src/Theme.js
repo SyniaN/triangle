@@ -3,7 +3,7 @@ import { ThemeProvider } from "styled-components";
 
 const Base = {
   pureWhite: "#ffffff",
-  softWhite: "#e4e5e6",
+  softWhite: "#f4f5f6",
   blueDark: "#F8B195",
   blueMid: "#016699",
   blueLight: "#5bb7d4",
@@ -22,6 +22,9 @@ const theme = {
     border: Base.blueDark,
     projectile: Base.red,
     arrow: Base.pureWhite
+  },
+  wall: {
+    background: Base.blueMid
   }
 };
 

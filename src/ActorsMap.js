@@ -6,11 +6,14 @@ import Icon from "./FontIcons";
 
 function ActorsMap() {
   const {
-    actors: { player, ais }
+    actors: { player, ais, walls }
   } = useContext(ActorsContainer.Context);
 
   return (
     <Wrapper>
+      {walls.map(wall => (
+        <Walls x={wall.x} y={wall.y} />
+      ))}
       <Player y={player.y} x={player.x} />
       {ais.map(ai => {
         const IconName = (() => {
@@ -59,6 +62,10 @@ const Ai = styled(Actor)`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Walls = styled(Actor)`
+  background-color: ${theme("wall.background")};
 `;
 
 export default ActorsMap;

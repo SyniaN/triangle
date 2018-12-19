@@ -10,7 +10,6 @@ function App() {
   );
 
   const keyDown = evt => {
-    console.log(moveLeft);
     switch (evt.key) {
       case "w":
         moveUp();
