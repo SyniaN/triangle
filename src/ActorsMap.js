@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ActorsContainer from "./ActorsContainer";
 import { prop, theme } from "styled-tools";
 import Icon from "./FontIcons";
+import { baseUnit, horizontalGridCount, verticalGridCount } from "./constants";
 
 function ActorsMap() {
   const {
@@ -39,18 +40,18 @@ function ActorsMap() {
 }
 
 const Wrapper = styled.div`
-  width: 200px;
-  height: 200px;
+  width: ${baseUnit * horizontalGridCount}px;
+  height: ${baseUnit * verticalGridCount}px;
   background-color: ${theme("bg")};
   position: relative;
 `;
 
 const Actor = styled.div`
-  width: 20px;
-  height: 20px;
+  width: ${baseUnit}px;
+  height: ${baseUnit}px;
   position: absolute;
-  top: ${prop("y")}px;
-  left: ${prop("x")}px;
+  top: ${prop("y") * baseUnit}px;
+  left: ${prop("x") * baseUnit}px;
 `;
 
 const Player = styled(Actor)`

@@ -7,22 +7,22 @@ function movePlayer(actionType, player) {
     case "MOVE_LEFT":
       return {
         ...player,
-        x: player.x > 0 ? player.x - 20 : 0
+        x: player.x > 0 ? player.x - 1 : 0
       };
     case "MOVE_RIGHT":
       return {
         ...player,
-        x: player.x < 180 ? player.x + 20 : 180
+        x: player.x < 10 ? player.x + 1 : 10
       };
     case "MOVE_UP":
       return {
         ...player,
-        y: player.y > 0 ? player.y - 20 : 0
+        y: player.y > 0 ? player.y - 1 : 0
       };
     case "MOVE_DOWN":
       return {
         ...player,
-        y: player.y < 180 ? player.y + 20 : 180
+        y: player.y < 10 ? player.y + 1 : 10
       };
     default:
       return player;
@@ -38,34 +38,34 @@ function reverseDirection(direction) {
 
 function moveAi(ai) {
   const withinRange =
-    Math.abs(ai.y - ai.init_y) < 60 && Math.abs(ai.x - ai.init_x) < 60;
-  const withinBound = ai.y < 180 && ai.y > 20 && ai.x < 180 && ai.x > 20;
+    Math.abs(ai.y - ai.init_y) < 6 && Math.abs(ai.x - ai.init_x) < 6;
+  const withinBound = ai.y < 10 && ai.y > 0 && ai.x < 10 && ai.x > 0;
 
   if ((withinRange && withinBound) || ai.justTurnedAround) {
     switch (ai.direction) {
       case "DOWN":
         return {
           ...ai,
-          y: ai.y + 20,
+          y: ai.y + 1,
           justTurnedAround: false
         };
 
       case "UP":
         return {
           ...ai,
-          y: ai.y - 20,
+          y: ai.y - 1,
           justTurnedAround: false
         };
       case "LEFT":
         return {
           ...ai,
-          x: ai.x - 20,
+          x: ai.x - 1,
           justTurnedAround: false
         };
       case "RIGHT":
         return {
           ...ai,
-          x: ai.x + 20,
+          x: ai.x + 1,
           justTurnedAround: false
         };
       default:
