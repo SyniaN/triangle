@@ -12,7 +12,7 @@ function movePlayer(actionType, player) {
     case "MOVE_RIGHT":
       return {
         ...player,
-        x: player.x < 10 ? player.x + 1 : 10
+        x: player.x < 9 ? player.x + 1 : 9
       };
     case "MOVE_UP":
       return {
@@ -22,7 +22,7 @@ function movePlayer(actionType, player) {
     case "MOVE_DOWN":
       return {
         ...player,
-        y: player.y < 10 ? player.y + 1 : 10
+        y: player.y < 9 ? player.y + 1 : 9
       };
     default:
       return player;
@@ -39,7 +39,7 @@ function reverseDirection(direction) {
 function moveAi(ai) {
   const withinRange =
     Math.abs(ai.y - ai.init_y) < 6 && Math.abs(ai.x - ai.init_x) < 6;
-  const withinBound = ai.y < 10 && ai.y > 0 && ai.x < 10 && ai.x > 0;
+  const withinBound = ai.y < 9 && ai.y > 0 && ai.x < 9 && ai.x > 0;
 
   if ((withinRange && withinBound) || ai.justTurnedAround) {
     switch (ai.direction) {
@@ -81,6 +81,7 @@ function moveAi(ai) {
 }
 
 function reducer(state, action) {
+  console.log(action);
   let returnObj = {};
 
   const player = movePlayer(action.type, state.player);

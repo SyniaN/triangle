@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import ActorsContainer from "./ActorsContainer";
-import { prop, theme } from "styled-tools";
+import { theme } from "styled-tools";
 import Icon from "./FontIcons";
 import { baseUnit, horizontalGridCount, verticalGridCount } from "./constants";
 
@@ -50,8 +50,8 @@ const Actor = styled.div`
   width: ${baseUnit}px;
   height: ${baseUnit}px;
   position: absolute;
-  top: ${prop("y") * baseUnit}px;
-  left: ${prop("x") * baseUnit}px;
+  top: ${prop=>prop.y*baseUnit}px;
+  left: ${prop=>prop.x*baseUnit}px;
 `;
 
 const Player = styled(Actor)`
