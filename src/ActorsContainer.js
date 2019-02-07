@@ -52,14 +52,16 @@ function reverseDirection(direction) {
   return undefined;
 }
 
+function actorCollideActorArray(actor, array) {
+  return array.some(wall => wall.x === actor.x && wall.y === actor.y);
+}
+
 function reducer(state, action) {
   let returnObj = {};
 
   const player = moveActor(action.type, state.player, state.mapSize - 1);
 
-  const playerHitWall = state.walls.some(
-    wall => wall.x === player.x && wall.y === player.y
-  );
+  const playerHitWall = actorCollideActorArray(player, state.walls);
 
   if (playerHitWall) {
     player.x = state.player.x;
@@ -69,9 +71,8 @@ function reducer(state, action) {
   const ais = state.ais
     .map(ai => moveActor(ai.direction, ai, state.mapSize - 1))
     .map((ai, i) => {
-      const aiHitWall = state.walls.some(
-        wall => wall.x === ai.x && wall.y === ai.y
-      );
+      const aiHitWall = actorCollideActorArray(ai, state.walls);
+
       if (aiHitWall) {
         ai.x = state.ais[i].x;
         ai.y = state.ais[i].y;
@@ -81,14 +82,7 @@ function reducer(state, action) {
       return ai;
     });
 
-  const playerHitEnemy = ais.some(
-    (ai, i) =>
-      (ai.x === player.x && ai.y === player.y) ||
-      (ai.x === state.player.x &&
-        ai.y === state.player.y &&
-        state.ais[i].x === player.x &&
-        state.ais[i].y === player.y)
-  );
+  const playerHitEnemy = actorCollideActorArray(player, ais);
 
   if (playerHitEnemy) {
     player.x = state.player.init_x;
