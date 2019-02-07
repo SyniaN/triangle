@@ -2,89 +2,60 @@ import { useReducer } from "react";
 import createContainer from "constate";
 import { initialState } from "./initialState";
 
-function movePlayer(actionType, player) {
+function moveActor(actionType, actor, bound) {
+  const canMoveLeft = actor.x > 0;
+  const canMoveRight = actor.x < bound;
+  const canMoveUp = actor.y > 0;
+  const canMoveDown = actor.y < bound;
+  const reduceDirection = canMove =>
+    canMove ? actor.direction : reverseDirection(actor.direction);
+
   switch (actionType) {
     case "MOVE_LEFT":
       return {
-        ...player,
-        x: player.x > 0 ? player.x - 1 : 0
+        ...actor,
+        x: canMoveLeft ? actor.x - 1 : 0,
+        direction: reduceDirection(canMoveLeft),
+        justTurnedAround: !canMoveLeft
       };
     case "MOVE_RIGHT":
       return {
-        ...player,
-        x: player.x < 9 ? player.x + 1 : 9
+        ...actor,
+        x: canMoveRight ? actor.x + 1 : bound,
+        direction: reduceDirection(canMoveRight),
+        justTurnedAround: !canMoveRight
       };
     case "MOVE_UP":
       return {
-        ...player,
-        y: player.y > 0 ? player.y - 1 : 0
+        ...actor,
+        y: canMoveUp ? actor.y - 1 : 0,
+        direction: reduceDirection(canMoveUp),
+        justTurnedAround: !canMoveUp
       };
     case "MOVE_DOWN":
       return {
-        ...player,
-        y: player.y < 9 ? player.y + 1 : 9
+        ...actor,
+        y: canMoveDown ? actor.y + 1 : bound,
+        direction: reduceDirection(canMoveDown),
+        justTurnedAround: !canMoveUp
       };
     default:
-      return player;
+      return actor;
   }
 }
 
 function reverseDirection(direction) {
-  if (direction === "UP") return "DOWN";
-  if (direction === "DOWN") return "UP";
-  if (direction === "RIGHT") return "LEFT";
-  if (direction === "LEFT") return "RIGHT";
-}
-
-function moveAi(ai) {
-  const withinRange =
-    Math.abs(ai.y - ai.init_y) < 6 && Math.abs(ai.x - ai.init_x) < 6;
-  const withinBound = ai.y < 9 && ai.y > 0 && ai.x < 9 && ai.x > 0;
-
-  if ((withinRange && withinBound) || ai.justTurnedAround) {
-    switch (ai.direction) {
-      case "DOWN":
-        return {
-          ...ai,
-          y: ai.y + 1,
-          justTurnedAround: false
-        };
-
-      case "UP":
-        return {
-          ...ai,
-          y: ai.y - 1,
-          justTurnedAround: false
-        };
-      case "LEFT":
-        return {
-          ...ai,
-          x: ai.x - 1,
-          justTurnedAround: false
-        };
-      case "RIGHT":
-        return {
-          ...ai,
-          x: ai.x + 1,
-          justTurnedAround: false
-        };
-      default:
-        return ai;
-    }
-  } else {
-    return {
-      ...ai,
-      direction: reverseDirection(ai.direction),
-      justTurnedAround: true
-    };
-  }
+  if (direction === "MOVE_UP") return "MOVE_DOWN";
+  if (direction === "MOVE_DOWN") return "MOVE_UP";
+  if (direction === "MOVE_RIGHT") return "MOVE_LEFT";
+  if (direction === "MOVE_LEFT") return "MOVE_RIGHT";
+  return undefined;
 }
 
 function reducer(state, action) {
-  console.log(action);
   let returnObj = {};
 
-  const player = movePlayer(action.type, state.player);
+  const player = moveActor(action.type, state.player, state.mapSize - 1);
 
   const playerHitWall = state.walls.some(
     wall => wall.x === player.x && wall.y === player.y
@@ -96,7 +67,7 @@ function reducer(state, action) {
   }
 
   const ais = state.ais
-    .map(ai => moveAi(ai))
+    .map(ai => moveActor(ai.direction, ai, state.mapSize - 1))
     .map((ai, i) => {
       const aiHitWall = state.walls.some(
         wall => wall.x === ai.x && wall.y === ai.y
@@ -105,6 +76,7 @@ function reducer(state, action) {
         ai.x = state.ais[i].x;
         ai.y = state.ais[i].y;
         ai.direction = reverseDirection(ai.direction);
+        ai.justTurnedAround = true;
       }
       return ai;
     });
@@ -123,7 +95,7 @@ function reducer(state, action) {
     player.y = state.player.init_y;
   }
 
-  returnObj = { player, ais, walls: state.walls };
+  returnObj = { ...state, player, ais, walls: state.walls };
 
   return returnObj;
 }

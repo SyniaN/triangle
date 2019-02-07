@@ -3,15 +3,15 @@ import styled from "styled-components";
 import ActorsContainer from "./ActorsContainer";
 import { theme } from "styled-tools";
 import Icon from "./FontIcons";
-import { baseUnit, horizontalGridCount, verticalGridCount } from "./constants";
+import { baseUnit } from "./constants";
 
 function ActorsMap() {
   const {
-    actors: { player, ais, walls }
+    actors: { player, ais, walls, mapSize }
   } = useContext(ActorsContainer.Context);
 
   return (
-    <Wrapper>
+    <Wrapper size={mapSize}>
       {walls.map(wall => (
         <Walls x={wall.x} y={wall.y} />
       ))}
@@ -19,11 +19,11 @@ function ActorsMap() {
       {ais.map(ai => {
         const IconName = (() => {
           switch (ai.direction) {
-            case "UP":
+            case "MOVE_UP":
               return "arrow-up";
-            case "DOWN":
+            case "MOVE_DOWN":
               return "arrow-down";
-            case "LEFT":
+            case "MOVE_LEFT":
               return "arrow-left";
             default:
               return "arrow-right";
@@ -40,8 +40,8 @@ function ActorsMap() {
 }
 
 const Wrapper = styled.div`
-  width: ${baseUnit * horizontalGridCount}px;
-  height: ${baseUnit * verticalGridCount}px;
+  width: ${props => baseUnit * props.size}px;
+  height: ${props => baseUnit * props.size}px;
   background-color: ${theme("bg")};
   position: relative;
 `;
@@ -50,8 +50,8 @@ const Actor = styled.div`
   width: ${baseUnit}px;
   height: ${baseUnit}px;
   position: absolute;
-  top: ${prop=>prop.y*baseUnit}px;
-  left: ${prop=>prop.x*baseUnit}px;
+  top: ${prop => prop.y * baseUnit}px;
+  left: ${prop => prop.x * baseUnit}px;
 `;
 
 const Player = styled(Actor)`

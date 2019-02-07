@@ -1,4 +1,5 @@
 export const initialState = {
+  mapSize: 5,
   player: {
     init_x: 0,
     init_y: 0,
@@ -11,7 +12,7 @@ export const initialState = {
       init_y: 4,
       x: 4,
       y: 4,
-      direction: "DOWN"
+      direction: "MOVE_DOWN"
     }
   ],
   walls: [

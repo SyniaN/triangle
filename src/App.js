@@ -42,4 +42,7 @@ export default App;
 const Wrapper = styled.div`
   border: none;
   outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
