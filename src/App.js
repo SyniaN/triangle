@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import ActorsContainer from "./ActorsContainer";
-import ActorsMap from "./ActorsMap";
+import Actors from "./Actors";
 import Theme from "./Theme";
 import styled from "styled-components";
 
@@ -31,7 +31,7 @@ function App() {
   return (
     <Wrapper tabIndex="0" onKeyPress={keyDown}>
       <Theme>
-        <ActorsMap />
+        <Actors />
       </Theme>
     </Wrapper>
   );
