@@ -1,1 +1,1 @@
-export const baseUnit = 100;
+export const baseUnit = 35;

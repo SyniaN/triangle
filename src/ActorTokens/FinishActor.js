@@ -14,7 +14,7 @@ const FinishActor = prop => (
 export default FinishActor;
 
 const Background = styled(BasicActor)`
-  background-color: ${theme("finish.background")};
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;

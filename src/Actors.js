@@ -40,8 +40,6 @@ function Actors() {
 
   return (
     <Wrapper size={mapSize} tabIndex="0" onKeyPress={keyDown}>
-      <FinishActor x={finish.x} y={finish.y} />
-
       {walls.map(wall => (
         <WallActor x={wall.x} y={wall.y} />
       ))}
@@ -51,6 +49,8 @@ function Actors() {
       ))}
 
       <PlayerActor y={player.y} x={player.x} />
+
+      <FinishActor x={finish.x} y={finish.y} />
     </Wrapper>
   );
 }

@@ -1,5 +1,28 @@
+const walls = [
+  {
+    x: 3,
+    y: 4
+  },
+  {
+    x: 1,
+    y: 3
+  },
+  {
+    x: 1,
+    y: 2
+  },
+  {
+    x: 1,
+    y: 1
+  },
+  {
+    x: 1,
+    y: 0
+  }
+];
+
 export const initialState = {
-  mapSize: 5,
+  mapSize: 15,
   player: {
     init_x: 0,
     init_y: 0,
@@ -15,30 +38,9 @@ export const initialState = {
       direction: "MOVE_DOWN"
     }
   ],
-  walls: [
-    {
-      x: 3,
-      y: 4
-    },
-    {
-      x: 1,
-      y: 3
-    },
-    {
-      x: 1,
-      y: 2
-    },
-    {
-      x: 1,
-      y: 1
-    },
-    {
-      x: 1,
-      y: 0
-    }
-  ],
   finish: {
-    x: 4,
-    y: 4
-  }
+    x: 14,
+    y: 14
+  },
+  walls: walls
 };
