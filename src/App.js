@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import ActorsContainer from "./ActorsContainer";
+import React from "react";
 import Actors from "./Actors";
 import Theme from "./Theme";
 import styled from "styled-components";

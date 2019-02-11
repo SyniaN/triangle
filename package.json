@@ -2,6 +2,7 @@
   "name": "triangle-game",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://synian.github.io/triangle",
   "dependencies": {
     "constate": "^1.0.0-alpha.6",
     "react": "^16.7.0-alpha.2",
@@ -12,6 +13,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -24,5 +27,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }
