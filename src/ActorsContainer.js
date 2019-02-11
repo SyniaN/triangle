@@ -1,7 +1,11 @@
 import { useReducer } from "react";
 import createContainer from "constate";
 import { initialState } from "./initialState";
-import { isCollidingWithItems, moveActor, reverseDirection } from "./helpers";
+import {
+  isCollidingWithItems,
+  moveActor,
+  reverseDirection
+} from "./helpers/actorsHelpers";
 
 function reducer(state, action) {
   let returnObj = {};

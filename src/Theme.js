@@ -25,6 +25,9 @@ const theme = {
   },
   wall: {
     background: Base.blueMid
+  },
+  finish: {
+    background: Base.softWhite
   }
 };
 

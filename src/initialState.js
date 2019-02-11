@@ -8,17 +8,37 @@ export const initialState = {
   },
   ais: [
     {
-      init_x: 4,
-      init_y: 4,
-      x: 4,
-      y: 4,
+      init_x: 3,
+      init_y: 3,
+      x: 3,
+      y: 3,
       direction: "MOVE_DOWN"
     }
   ],
   walls: [
     {
-      x: 2,
+      x: 3,
+      y: 4
+    },
+    {
+      x: 1,
+      y: 3
+    },
+    {
+      x: 1,
+      y: 2
+    },
+    {
+      x: 1,
+      y: 1
+    },
+    {
+      x: 1,
       y: 0
     }
-  ]
+  ],
+  finish: {
+    x: 4,
+    y: 4
+  }
 };

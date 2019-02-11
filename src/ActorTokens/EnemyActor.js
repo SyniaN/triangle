@@ -20,13 +20,13 @@ const EnemyActor = ({ x, y, direction }) => {
   })();
 
   return (
-    <Ai y={y} x={x}>
+    <Background y={y} x={x}>
       <Icon name={iconName} color="theme.ai.arrow" />
-    </Ai>
+    </Background>
   );
 };
 
-const Ai = styled(BasicActor)`
+const Background = styled(BasicActor)`
   background-color: ${theme("ai.background")};
   display: flex;
   justify-content: center;

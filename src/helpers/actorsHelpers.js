@@ -1,5 +1,9 @@
 export function isCollidingWithItems(actor, array) {
-  return array.some(wall => wall.x === actor.x && wall.y === actor.y);
+  return array.some(item => item.x === actor.x && item.y === actor.y);
+}
+
+export function isCollidingWithAnItem(actor1, actor2) {
+  return actor1.x === actor2.x && actor1.y === actor2.y;
 }
 
 export function moveActor(actionType, actor, bound) {
