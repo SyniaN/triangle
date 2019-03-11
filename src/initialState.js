@@ -1,3 +1,9 @@
+const player = {
+  init_x: 0,
+  init_y: 0,
+  x: 0,
+  y: 0
+};
 const walls = [
   {
     x: 3,
@@ -20,27 +26,21 @@ const walls = [
     y: 0
   }
 ];
+const ais = [
+  {
+    init_x: 3,
+    init_y: 3,
+    x: 3,
+    y: 3,
+    direction: "MOVE_DOWN"
+  }
+];
+const finish = { x: 4, y: 4 };
 
 export const initialState = {
-  mapSize: 15,
-  player: {
-    init_x: 0,
-    init_y: 0,
-    x: 0,
-    y: 0
-  },
-  ais: [
-    {
-      init_x: 3,
-      init_y: 3,
-      x: 3,
-      y: 3,
-      direction: "MOVE_DOWN"
-    }
-  ],
-  finish: {
-    x: 14,
-    y: 14
-  },
-  walls: walls
+  mapSize: 5,
+  player,
+  ais,
+  finish,
+  walls
 };
